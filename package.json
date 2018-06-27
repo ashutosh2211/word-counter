@@ -6,8 +6,7 @@
   "private": true,
   "main": "src",
   "scripts": {
-    "start": "node src/cli.js $*",
-    "test": "mocha src/spec/*",
+    "test": "mocha ./src/**/*.spec.js",
     "pretest": "eslint --ignore-path .gitignore ."
   },
   "dependencies": {
