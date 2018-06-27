@@ -1,4 +1,5 @@
 const chai = require('chai');
+const errors = require('../errors');
 const Processor = require('../processor');
 const WordCounter = require('../word-counter');
 const chaiAsPromised = require('chai-as-promised');
@@ -17,9 +18,7 @@ describe('Test Processor', function() {
 
     it('with proper filePath', function() {
       const processor = new Processor('./files/Railway-Children-by-E-Nesbit', wordCounter);
-      return chai.expect(processor.getFileStream())
-        .to.eventually.be.an.instanceof(stream.Readable);
-
+      return chai.assert.eventually.instanceOf(processor.getFileStream(), stream.Readable);
     });
 
     it('with wrong filePath', function() {
@@ -27,9 +26,15 @@ describe('Test Processor', function() {
       const res = processor.getFileStream();
       return res.then(stream => {
         stream.on('error', (err) => {
-          return chai.expect(err).to.be.an.instanceof(Error);
+          return chai.assert.instanceOf(err, Error);
         });
       });
+    });
+
+    it('with empty filePath', function() {
+      const processor = new Processor('', wordCounter);
+      const res = processor.getFileStream();
+      return chai.assert.isRejected(res, errors.InvalidFilePath);
     });
 
   });
@@ -57,15 +62,13 @@ describe('Test Processor', function() {
         dog: 1,
       };
       processor.transform(wordCounter, data);
-      return chai.expect(wordCounter.wordCountMap)
-        .deep.equal(expectedResp);
+      return chai.assert.deepEqual(wordCounter.wordCountMap, expectedResp);
     });
 
     it('test transform without text', function() {
       const expectedResp = {};
       processor.transform(wordCounter, '');
-      return chai.expect(wordCounter.wordCountMap)
-        .deep.equal(expectedResp);
+      return chai.assert.deepEqual(wordCounter.wordCountMap, expectedResp);
     });
   });
 
@@ -83,14 +86,13 @@ describe('Test Processor', function() {
       const data = 'The quick brown fox jumps over the lazy dog \n';
       const g = processor.getLine(data);
       const val = g.next().value;
-      return chai.expect(val.line).deep.equal(data);
+      return chai.assert.deepEqual(val.line, data);
     });
 
     it('test getLine without text', function() {
       const expectedResp = {};
       processor.transform(wordCounter, '');
-      return chai.expect(wordCounter.wordCountMap)
-        .deep.equal(expectedResp);
+      return chai.assert.deepEqual(wordCounter.wordCountMap, expectedResp);
     });
   });
 
@@ -104,15 +106,13 @@ describe('Test Processor', function() {
     it('with proper filePath', function() {
       const processor = new Processor('./src/spec/files/test', wordCounter);
       const res = processor.process();
-      return chai.expect(res)
-        .to.eventually.be.an.instanceof(WordCounter);
+      return chai.assert.eventually.propertyVal(res, 'maxCount', 8);
     });
 
     it('with improper filePath', function() {
       const processor = new Processor('/test', wordCounter);
       const res = processor.process();
-      return chai.expect(res)
-        .to.eventually.be.rejected;
+      return chai.assert.isRejected(res, Error);
     });
   });
 
