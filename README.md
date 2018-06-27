@@ -52,3 +52,4 @@ $ node src/cli.js -f files/Railway-Children-by-E-Nesbit
 ## Development
 I have used streams to read the file asynchronously in chunks and split the text and store the resultant words in an
 Object. The cli script invokes the processor which takes the wordCounter and filePath to process the file.
+After the word counts are generated the check if count is a prime number is performed.
