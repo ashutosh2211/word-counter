@@ -22,9 +22,10 @@ class Processor {
     return new Promise((resolve, reject) => {
       if (!this.filePath) {
         reject(errors.InvalidFilePath);
+      } else {
+        const stream = fs.createReadStream(this.filePath, {encoding: 'utf8', highWaterMark: chunkSize});
+        resolve(stream);
       }
-      const stream = fs.createReadStream(this.filePath, {encoding: 'utf8', highWaterMark: chunkSize});
-      resolve(stream);
     });
   }
 
