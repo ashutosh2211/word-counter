@@ -12,23 +12,27 @@ program
   .option('-f, --filePath <required>', 'File Path')
   .parse(process.argv);
 
-if (!program.filePath) {
-  throw errors.FilePathMissing;
+function run() {
+  if (!program.filePath) {
+    throw errors.FilePathMissing;
+  }
+
+  const wordCounter = new WordCounter();
+  const processor = new Processor(program.filePath, wordCounter);
+
+  processor.process()
+    .then((wCount) => {
+      const primeChecker = new PrimeChecker(wCount.maxCount);
+      return wCount.getWordsByOccurrence().map(r => {
+        const obj = Object.assign({}, r);
+        obj.isPrime = primeChecker.isPrime(r.count);
+        return obj;
+      });
+    })
+    .then(display)
+    .catch(err => {
+      console.log(err);
+    });
 }
 
-const wordCounter = new WordCounter();
-const processor = new Processor(program.filePath, wordCounter);
-
-processor.process()
-  .then((wCount) => {
-    const primeChecker = new PrimeChecker(wCount.maxCount);
-    return wCount.getWordsByOccurrence().map(r => {
-      const obj = Object.assign({}, r);
-      obj.isPrime = primeChecker.isPrime(r.count);
-      return obj;
-    });
-  })
-  .then(display)
-  .catch(err => {
-    console.log(err);
-  });
+run();
