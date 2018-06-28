@@ -30,7 +30,7 @@ class Processor {
   }
 
   /**
-   * Returns a Readable stream for the given filePath
+   * Counts the number of words present in a string and adds them to the wordCounter object
    * @param {WordCounter} wordCounter object that counts words for a given chunk of data
    * @param {String} data which is to be tokenized and counted
    * @return
