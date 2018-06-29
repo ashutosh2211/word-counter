@@ -46,6 +46,23 @@ class WordCounter {
     });
   }
 
+  containsVowel(text) {
+    if (!text) {
+      return False;
+    }
+    text.forEach(c => {
+      return ['a', 'e', 'i', 'o', 'u'].includes(c)
+    });
+  }
+
+  countVowels(text) {
+    if(!text){
+      return;
+    }
+    const wordList = WordCounter.tokenize(text.toLowerCase());
+
+  }
+
   /**
    * Returns a sorted list of words by count of occurrences and lexicographically if occurrences are equal
    * @return {Array<String>} Sorted array of strings

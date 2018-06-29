@@ -90,6 +90,47 @@ describe('Test Word Count', function() {
     });
 
   });
+  
+  describe('Test containsVowel', function() {
+
+    let wordCount;
+
+    beforeEach(function() {
+      wordCount = new WordCount();
+    });
+
+    it("with valid input", function() {
+      let word = "after"
+      return chai.assert.isTrue(wordCount.containsVowel(word));
+    });
+
+    it("with valid input without vowel", function() {
+      let word = "lwr"
+      return chai.assert.isNotTrue(wordCount.containsVowel(word));
+    });
+
+    it("with invalid input", function() {
+      return chai.assert.isNotTrue(wordCount.containsVowel());
+    });
+  }
+
+  describe('Test countVowels', function() {
+
+    let wordCount;
+
+    beforeEach(function() {
+      wordCount = new WordCount();
+    });
+
+    it('without text', function() {
+      return chai.assert.deepEqual(wordCount.countVowels());
+    });
+
+    it('with text', function() {
+      return chai.assert.deepEqual(wordCount.countVowels(), undefined);
+    });
+
+  });
 
   describe('Test getWordsSortedByOccurrence', function() {
     let wordCount;
